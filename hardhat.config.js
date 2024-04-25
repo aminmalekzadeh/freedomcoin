@@ -1,5 +1,5 @@
-require("@nomiclabs/hardhat-waffle");
-// require("@nomicfoundation/hardhat-toolbox")
+// require("@nomiclabs/hardhat-waffle");
+require("@nomicfoundation/hardhat-toolbox")
 
 require("dotenv").config()
 
@@ -11,7 +11,7 @@ require("dotenv").config()
  */
 module.exports = {
   etherscan: {
-    apiKey: "AHJFQN9UTSYFGA4BAYNDSG9QJ21W4X1WIT",
+    apiKey: "JXX2RRKDRW5SMRZ4FT5DM1YWF3BG4PDPUS",
   },
   sourcify: {
     // Disabled by default
@@ -19,7 +19,7 @@ module.exports = {
     enabled: true
   },
   solidity: {
-    version: "0.8.10",
+    version: "0.8.20",
     settings: {
       optimizer: {
         enabled: true,
