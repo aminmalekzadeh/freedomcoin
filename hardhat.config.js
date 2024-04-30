@@ -1,6 +1,5 @@
 // require("@nomiclabs/hardhat-waffle");
 require("@nomicfoundation/hardhat-toolbox")
-
 require("dotenv").config()
 
 // You need to export an object to set up your config
@@ -29,8 +28,8 @@ module.exports = {
   },
   networks: {
     sepolia: {
-      url: "https://sepolia.infura.io/v3/6eaa3174aee0413ab852145e02fc306f",
-      accounts: ['0x63de17d346d140f9337d0e1ae524314aa27913f3ef526f7fb0c5a0afc31f374e']
+      url: `https://sepolia.infura.io/v3/${process.env.API_KEY_ACCESS}`,
+      accounts: [`0x${process.env.PRIVATE_KEY_TO_DEPLOY}`]
     },
   },
 };

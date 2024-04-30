@@ -15,8 +15,8 @@ async function main() {
   // Wait for the contract to be deployed
   await freedomCoin.deployed();
 
-  console.log("FreedomCoin deployed to:", freedomCoin.address);
-  console.log("Contract deployed by:", initialOwner); // Log the deployer's address
+  console.log("FreedomCoin deployed to (Contract Address):", freedomCoin.address);
+  console.log("Contract deployed by (Contract Owner):", initialOwner); // Log the deployer's address
 }
 
 main()
