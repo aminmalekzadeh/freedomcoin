@@ -1,5 +1,5 @@
-// require("@nomiclabs/hardhat-waffle");
-require("@nomicfoundation/hardhat-toolbox")
+require("@nomiclabs/hardhat-waffle");
+// require("@nomicfoundation/hardhat-toolbox")
 require("dotenv").config()
 
 // You need to export an object to set up your config
@@ -10,7 +10,7 @@ require("dotenv").config()
  */
 module.exports = {
   etherscan: {
-    apiKey: "JXX2RRKDRW5SMRZ4FT5DM1YWF3BG4PDPUS",
+    apiKey: "AHJFQN9UTSYFGA4BAYNDSG9QJ21W4X1WIT",
   },
   sourcify: {
     // Disabled by default
@@ -31,5 +31,10 @@ module.exports = {
       url: `https://sepolia.infura.io/v3/${process.env.API_KEY_ACCESS}`,
       accounts: [`0x${process.env.PRIVATE_KEY_TO_DEPLOY}`]
     },
+    polygon: {
+      url: `https://polygon-mainnet.g.alchemy.com/v2/${process.env.API_KEY_ACCESS}`,
+      accounts: [`0x${process.env.PRIVATE_KEY_TO_DEPLOY}`],
+      chainId: 137,
+    }
   },
 };
