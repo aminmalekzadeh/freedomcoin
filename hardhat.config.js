@@ -10,12 +10,7 @@ require("dotenv").config()
  */
 module.exports = {
   etherscan: {
-    apiKey: "AHJFQN9UTSYFGA4BAYNDSG9QJ21W4X1WIT",
-  },
-  sourcify: {
-    // Disabled by default
-    // Doesn't need an API key
-    enabled: true
+    apiKey: "JXX2RRKDRW5SMRZ4FT5DM1YWF3BG4PDPUS",
   },
   solidity: {
     version: "0.8.20",
