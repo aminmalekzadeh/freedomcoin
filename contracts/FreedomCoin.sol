@@ -7,6 +7,9 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 import "./interfaces/IUniswapV2Factory.sol";
 import "./interfaces/IUniswapV2Pair.sol";
 import "./interfaces/IUniswapV2Router02.sol";
+
+
+
 /*
 
 Website: https://thefreedomcoin.org
@@ -24,7 +27,8 @@ contract FreedomCoin is ERC20, Ownable, ERC20Permit {
     address payable public charityAddress = payable(0x047c0D746D42fF4cEe7d2CB1FBf5c0D090267931);
     address payable public marketingDevAddress = payable(0x0331535b9f37EB41F437EA0cfE345ABB9d102A1A);
 
-    address public uniswapV2RouterAddress = 0xedf6066a2b290C185783862C7F4776A2C8077AD1;
+    //address public uniswapV2RouterAddress = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D; // MAINNET
+    address public uniswapV2RouterAddress = 0xedf6066a2b290C185783862C7F4776A2C8077AD1; // POLYGON
     IUniswapV2Router02 public uniswapV2Router;
     address public pairV2;
 
@@ -44,21 +48,27 @@ contract FreedomCoin is ERC20, Ownable, ERC20Permit {
         Ownable(initialOwner)
         ERC20Permit("Freedom")
     {
-        uint256 totalSupply = 7000000 * (10 ** uint256(decimals()));
+        uint256 totalSupply = 7000000 * (10 ** decimals());
         _mint(initialOwner, totalSupply);
-        uint256 charityAmount = totalSupply * 1 / 100; // 1%
-        uint256 marketingDevAmount = totalSupply * 9 / 1000; // 0.9%
 
-        transferFrom(initialOwner, charityAddress, charityAmount);
-        transferFrom(initialOwner,marketingDevAddress, marketingDevAmount);
-        uniswapV2Router = IUniswapV2Router02(uniswapV2RouterAddress);
-
-        pairV2 = IUniswapV2Factory(uniswapV2Router.factory()).createPair(uniswapV2Router.WETH(), address(this));
-        liquidityPools[pairV2] = true;
-
-        _approve(msg.sender, address(uniswapV2RouterAddress), type(uint256).max);
-        _approve(address(this), address(uniswapV2RouterAddress), type(uint256).max);
+        // Direct transfers to predefined addresses
+        transfer(charityAddress, totalSupply * 1 / 100); // 1%
+        transfer(marketingDevAddress, totalSupply * 9 / 1000); // 0.9%
     }
+
+   function initializeUniswapInteractions(address _uniswapRouterAddress) external onlyOwner {
+    require(_uniswapRouterAddress != address(0), "Invalid router address");
+    uniswapV2RouterAddress = _uniswapRouterAddress;
+    uniswapV2Router = IUniswapV2Router02(_uniswapRouterAddress);
+
+    // Create a trading pair on Uniswap
+    pairV2 = IUniswapV2Factory(uniswapV2Router.factory()).createPair(uniswapV2Router.WETH(), address(this));
+    require(pairV2 != address(0), "Failed to create pair");
+    liquidityPools[pairV2] = true;
+
+    // Approve the Uniswap router to handle tokens for adding liquidity
+    _approve(address(this), _uniswapRouterAddress, type(uint256).max);
+}
 
     function clearStuckNativeBalance(uint256 amountPercentage, address adr) external onlyOwner() {
         uint256 amountETH = address(this).balance;
@@ -76,30 +86,33 @@ contract FreedomCoin is ERC20, Ownable, ERC20Permit {
         }
     }
 
-    function _transferWithFee(address sender, address recipient, uint256 amount) public {
-        uint256 taxAmount = 0;
-        _tempCharityFee = (amount * charityFee) / 1000;
-        _tempLiquidityFee = (amount * liquidityFee) / 1000;
-        _tempMarketingFee = (amount * devMarketingFee) / 1000;
-        uint256 _calTotalFees = _tempCharityFee + _tempLiquidityFee + _tempMarketingFee;
-        uint256 amountAfterFees = amount - _calTotalFees;
+function _transferWithFee(address sender, address recipient, uint256 amount) public {
+    require(sender != address(0), "ERC20: transfer from the zero address");
+    require(recipient != address(0), "ERC20: transfer to the zero address");
+    require(amount > 0, "Transfer amount must be greater than zero");
+    uint256 taxAmount = 0;
+    _tempCharityFee = (amount * charityFee) / 1000;  // Multiplication followed by division
+    _tempLiquidityFee = (amount * liquidityFee) / 1000;
+    _tempMarketingFee = (amount * devMarketingFee) / 1000;
+    uint256 _calTotalFees = _tempCharityFee + _tempLiquidityFee + _tempMarketingFee;
+    uint256 amountAfterFees = amount - _calTotalFees;
 
-        if(inSwap){             
-            return super._transfer(sender, recipient, amount);
-        }
-
-        if(liquidityPools[recipient] || liquidityPools[sender]){
-            taxAmount = _calTotalFees;
-            super._transfer(sender, address(this), _calTotalFees);
-        }
-
-        super._transfer(sender, recipient, amountAfterFees);
-
-        if(taxAmount > 0){
-            swapBack();
-        }
-       
+    if (inSwap) {             
+        super._transfer(sender, recipient, amount);
+        return;
     }
+
+    if (liquidityPools[recipient] || liquidityPools[sender]) {
+        taxAmount = _calTotalFees;
+        super._transfer(sender, address(this), _calTotalFees);
+    }
+
+    super._transfer(sender, recipient, amountAfterFees);
+
+    if (taxAmount > 0) {
+        swapBack();
+    }
+}
 
     function swapBack() internal swapping {
         if(_tempCharityFee > 0){
@@ -153,24 +166,29 @@ contract FreedomCoin is ERC20, Ownable, ERC20Permit {
         _transfer(msg.sender, address(this), amount);
     }
 
-    function _addLiquidityETH(uint256 tokenAmount, uint256 ethAmount) internal {
-        require(address(this).balance >= ethAmount, "Not enough ETH for liquidity");
-        _approve(address(this), address(uniswapV2RouterAddress), tokenAmount);
+function _addLiquidityETH(uint256 tokenAmount, uint256 ethAmount) internal {
+    require(address(this).balance >= ethAmount, "Not enough ETH for liquidity");
+    _approve(address(this), address(uniswapV2RouterAddress), tokenAmount);
 
-        require(tokenAmount <= allowance(address(this), address(uniswapV2Router)), "Liquidity addition request exceeds allowance");
+    require(tokenAmount <= allowance(address(this), address(uniswapV2Router)), "Liquidity addition request exceeds allowance");
 
-        (uint256 tokenAmountSent, uint256 ethAmountSent, uint256 liquidity) = uniswapV2Router.addLiquidityETH{value: ethAmount}(
-            address(this),
-            tokenAmount,
-            0, // slippage is unavoidable
-            0, // slippage is unavoidable
-            address(this),
-            block.timestamp + 600
-        );
-        require(liquidity > 0, "Liquidity addition failed");
+    // Add liquidity and capture the results to validate them
+    (uint256 tokenAmountSent, uint256 ethAmountSent, uint256 liquidity) = uniswapV2Router.addLiquidityETH{value: ethAmount}(
+        address(this),
+        tokenAmount,
+        0, // slippage is unavoidable
+        0, // slippage is unavoidable
+        address(this),
+        block.timestamp + 600
+    );
 
-        _tempLiquidityFee = 0;
-    }
+    // Ensure that liquidity tokens were issued
+    require(liquidity > 0, "Liquidity addition failed");
+    // Optional: Validate the amounts sent to the pool
+    require(tokenAmountSent == tokenAmount && ethAmountSent == ethAmount, "Mismatch in expected liquidity amounts");
+
+    _tempLiquidityFee = 0;
+}
 
     function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
         address sender = _msgSender();
