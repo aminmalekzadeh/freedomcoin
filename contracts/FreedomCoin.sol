@@ -19,7 +19,6 @@ X (Twitter): https://twitter.com/freedomcoinf
 Telegram: https://t.me/freedomcoinether
 
 **/
-
 contract FreedomCoin is ERC20, Ownable, ERC20Permit {
 
     mapping (address => bool) public liquidityPools;
