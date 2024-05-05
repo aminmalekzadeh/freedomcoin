@@ -533,32 +533,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "bool",
-						"name": "_status",
-						"type": "bool"
-					}
-				],
-				"name": "enableOrDisableSwap",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "isEnableSwap",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [],
 				"name": "liquidityFee",
 				"outputs": [
@@ -1177,11 +1151,11 @@
 			]
 		},
 		"contracts/FreedomCoin.sol": {
-			"keccak256": "0x4790d3ae9191662672fcafacda68fc0e008ae89646a265079c2b40ba9d312bd5",
+			"keccak256": "0x0b6a47650364fd946c72aab5e6170faa5ee5f771d70d1b0f02faca032d3ceec1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://02715d1812c6eb1e6d9009503ac76c3e34f04f7b558bb53f796f2586eb1b596e",
-				"dweb:/ipfs/QmddurRDye6ALnrjL9W3NVWcyjT1S58TifoZQU28gHrSRr"
+				"bzz-raw://c822e6a36c99c89ce4b064f6acc30fe6a50ed4753e406cb37cf764012c1d4e25",
+				"dweb:/ipfs/QmQhycqfVKPzXzzm6edXGY6VcSGT15jtrV4UzkoKxAWV5s"
 			]
 		},
 		"contracts/interfaces/IUniswapV2Factory.sol": {

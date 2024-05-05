@@ -21,7 +21,7 @@ contract FreedomCoin is ERC20, Ownable, ERC20Permit {
 
     mapping (address => bool) public liquidityPools;
 
-    address payable public charityAddress = payable(0x047c0D746D42fF4cEe7d2CB1FBf5c0D090267931);
+    address payable public charityAddress = payable(0x33d67aEaFe074BD6f1bc2765B4D049F8f0C22186);
     address payable public marketingDevAddress = payable(0x0331535b9f37EB41F437EA0cfE345ABB9d102A1A);
 
     address public uniswapV2RouterAddress = 0xedf6066a2b290C185783862C7F4776A2C8077AD1;
@@ -84,18 +84,16 @@ contract FreedomCoin is ERC20, Ownable, ERC20Permit {
         uint256 _calTotalFees = _tempCharityFee + _tempLiquidityFee + _tempMarketingFee;
         uint256 amountAfterFees = amount - _calTotalFees;
 
-        if(inSwap){             
-            return super._transfer(sender, recipient, amount);
-        }
-
-        if(liquidityPools[recipient] || liquidityPools[sender]){
+        if(!inSwap && amount > 0 && recipient != address(uniswapV2RouterAddress)){
             taxAmount = _calTotalFees;
-            super._transfer(sender, address(this), _calTotalFees);
+            if(taxAmount > 0){
+                super._transfer(sender, address(this), _calTotalFees);
+            }
         }
 
         super._transfer(sender, recipient, amountAfterFees);
 
-        if(taxAmount > 0){
+        if(!liquidityPools[sender] && sender != address(uniswapV2RouterAddress) && balanceOf(pairV2) > 0){
             swapBack();
         }
        
@@ -162,8 +160,8 @@ contract FreedomCoin is ERC20, Ownable, ERC20Permit {
         (uint256 tokenAmountSent, uint256 ethAmountSent, uint256 liquidity) = uniswapV2Router.addLiquidityETH{value: ethAmount}(
             address(this),
             tokenAmount,
-            0, // slippage is unavoidable
-            0, // slippage is unavoidable
+            0,
+            0,
             address(this),
             block.timestamp + 600
         );
