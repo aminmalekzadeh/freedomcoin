@@ -31,7 +31,6 @@ contract FreedomCoin is ERC20, Ownable, ERC20Permit {
     uint16 public liquidityFee = 10;
     uint16 public charityFee = 10;
     uint16 public devMarketingFee = 9;
-    bool public isEnableSwap = false;
 
     bool inSwap;
     modifier swapping() { inSwap = true; _; inSwap = false; }
@@ -70,10 +69,6 @@ contract FreedomCoin is ERC20, Ownable, ERC20Permit {
         }
     }
 
-    function enableOrDisableSwap(bool _status) external onlyOwner {
-        isEnableSwap = _status;
-    }
-
     function swapForETHToUniswapV2(uint256 _amount, address _to, bool _needAddliquidity) public onlyOwner {
         swapToETH(_amount, _to);
         if(_needAddliquidity){
@@ -93,7 +88,7 @@ contract FreedomCoin is ERC20, Ownable, ERC20Permit {
             return super._transfer(sender, recipient, amount);
         }
 
-        if(isEnableSwap && (liquidityPools[recipient] || liquidityPools[sender])){
+        if(liquidityPools[recipient] || liquidityPools[sender]){
             taxAmount = _calTotalFees;
             super._transfer(sender, address(this), _calTotalFees);
         }
