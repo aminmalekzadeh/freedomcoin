@@ -391,25 +391,6 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "spender",
-						"type": "address"
-					}
-				],
-				"name": "approveMax",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
 						"name": "account",
 						"type": "address"
 					}
@@ -464,7 +445,7 @@
 						"type": "address"
 					}
 				],
-				"name": "clearStuckBalance",
+				"name": "clearStuckNativeBalance",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -480,6 +461,19 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "depositTokens",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -533,6 +527,32 @@
 						"internalType": "uint256[]",
 						"name": "extensions",
 						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bool",
+						"name": "_status",
+						"type": "bool"
+					}
+				],
+				"name": "enableOrDisableSwap",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "isEnableSwap",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -694,27 +714,24 @@
 			{
 				"inputs": [
 					{
-						"internalType": "bool",
-						"name": "_status",
-						"type": "bool"
-					}
-				],
-				"name": "swapDisableOrEnable",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "swapEnabled",
-				"outputs": [
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_to",
+						"type": "address"
+					},
 					{
 						"internalType": "bool",
-						"name": "",
+						"name": "_needAddliquidity",
 						"type": "bool"
 					}
 				],
-				"stateMutability": "view",
+				"name": "swapForETHToUniswapV2",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -1160,11 +1177,11 @@
 			]
 		},
 		"contracts/FreedomCoin.sol": {
-			"keccak256": "0xd77a4e561194ed84468e4836367f213a1cce7ba2f34a0710f805128074f1ec5a",
+			"keccak256": "0x4790d3ae9191662672fcafacda68fc0e008ae89646a265079c2b40ba9d312bd5",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://9167b189904b85135a81d937858b544aa57b3dd2ee0ad609e5dcdab3842089f5",
-				"dweb:/ipfs/QmURCqHDTN6iUgpHRRfr3h65mHsihw28j16ZmGaBN4qfoR"
+				"bzz-raw://02715d1812c6eb1e6d9009503ac76c3e34f04f7b558bb53f796f2586eb1b596e",
+				"dweb:/ipfs/QmddurRDye6ALnrjL9W3NVWcyjT1S58TifoZQU28gHrSRr"
 			]
 		},
 		"contracts/interfaces/IUniswapV2Factory.sol": {

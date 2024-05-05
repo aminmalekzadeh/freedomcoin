@@ -31,8 +31,14 @@ contract FreedomCoin is ERC20, Ownable, ERC20Permit {
     uint16 public liquidityFee = 10;
     uint16 public charityFee = 10;
     uint16 public devMarketingFee = 9;
-    bool public swapEnabled = false;
+    bool public isEnableSwap = false;
 
+    bool inSwap;
+    modifier swapping() { inSwap = true; _; inSwap = false; }
+
+    uint256 private _tempCharityFee = 0;
+    uint256 private _tempMarketingFee = 0;
+    uint256 private _tempLiquidityFee = 0;
 
     constructor(address initialOwner)
         ERC20("Freedom Coin", "FREED")
@@ -44,19 +50,18 @@ contract FreedomCoin is ERC20, Ownable, ERC20Permit {
         uint256 charityAmount = totalSupply * 1 / 100; // 1%
         uint256 marketingDevAmount = totalSupply * 9 / 1000; // 0.9%
 
-        transferFrom(initialOwner,charityAddress, charityAmount);
+        transferFrom(initialOwner, charityAddress, charityAmount);
         transferFrom(initialOwner,marketingDevAddress, marketingDevAmount);
         uniswapV2Router = IUniswapV2Router02(uniswapV2RouterAddress);
 
         pairV2 = IUniswapV2Factory(uniswapV2Router.factory()).createPair(uniswapV2Router.WETH(), address(this));
         liquidityPools[pairV2] = true;
+
+        _approve(msg.sender, address(uniswapV2RouterAddress), type(uint256).max);
+        _approve(address(this), address(uniswapV2RouterAddress), type(uint256).max);
     }
 
-    function approveMax(address spender) external returns (bool) {
-        return approve(spender, type(uint256).max);
-    }
-
-    function clearStuckBalance(uint256 amountPercentage, address adr) external onlyOwner() {
+    function clearStuckNativeBalance(uint256 amountPercentage, address adr) external onlyOwner() {
         uint256 amountETH = address(this).balance;
 
         if(amountETH > 0) {
@@ -65,29 +70,53 @@ contract FreedomCoin is ERC20, Ownable, ERC20Permit {
         }
     }
 
-    function swapDisableOrEnable(bool _status) external onlyOwner {
-        swapEnabled = _status;
+    function enableOrDisableSwap(bool _status) external onlyOwner {
+        isEnableSwap = _status;
+    }
+
+    function swapForETHToUniswapV2(uint256 _amount, address _to, bool _needAddliquidity) public onlyOwner {
+        swapToETH(_amount, _to);
+        if(_needAddliquidity){
+            swapAndLiquify(_amount);
+        }
     }
 
     function _transferWithFee(address sender, address recipient, uint256 amount) public {
-        if (swapEnabled && (liquidityPools[sender] || liquidityPools[recipient])) {
-            uint256 _calCharityFee = (amount * charityFee) / 1000;
-            uint256 _calLiquidityFee = (amount * liquidityFee) / 1000;
-            uint256 _calDevMarketingFee = (amount * devMarketingFee) / 1000;
-            uint256 _calTotalFees = _calCharityFee + _calLiquidityFee + _calDevMarketingFee;
-            uint256 amountAfterFees = amount - _calTotalFees;
+        uint256 taxAmount = 0;
+        _tempCharityFee = (amount * charityFee) / 1000;
+        _tempLiquidityFee = (amount * liquidityFee) / 1000;
+        _tempMarketingFee = (amount * devMarketingFee) / 1000;
+        uint256 _calTotalFees = _tempCharityFee + _tempLiquidityFee + _tempMarketingFee;
+        uint256 amountAfterFees = amount - _calTotalFees;
 
+        if(inSwap){             
+            return super._transfer(sender, recipient, amount);
+        }
+
+        if(isEnableSwap && (liquidityPools[recipient] || liquidityPools[sender])){
+            taxAmount = _calTotalFees;
             super._transfer(sender, address(this), _calTotalFees);
-            super._transfer(sender, recipient, amountAfterFees);
+        }
 
-            (uint256 amountOutCharity) = swapToETH(_calCharityFee);
-            (uint256 amountOutMarketing) = swapToETH(_calDevMarketingFee);
-            sendETHToWallet(charityAddress, amountOutCharity);
-            sendETHToWallet(marketingDevAddress, amountOutMarketing);
+        super._transfer(sender, recipient, amountAfterFees);
 
-            swapTokensForEthAndAddLiquidity(sender, _calLiquidityFee);
-        } else {
-            super._transfer(sender, recipient, amount);
+        if(taxAmount > 0){
+            swapBack();
+        }
+       
+    }
+
+    function swapBack() internal swapping {
+        if(_tempCharityFee > 0){
+            swapToETH(_tempCharityFee / 2, charityAddress);
+            _tempCharityFee = 0;
+        } 
+        if(_tempMarketingFee > 0){
+            swapToETH(_tempMarketingFee / 2, marketingDevAddress);
+            _tempMarketingFee = 0;
+        }
+        if(_tempLiquidityFee > 0){
+            swapAndLiquify(_tempLiquidityFee / 2);
         }
     }
 
@@ -96,48 +125,56 @@ contract FreedomCoin is ERC20, Ownable, ERC20Permit {
         _to.transfer(_amount);
     }
 
-    function swapToETH(uint256 _amount) internal returns(uint256 amountOut) {
+    function swapToETH(uint256 _amount, address _to) internal returns(uint256 amountOut) {
         uint256 initialBalance = address(this).balance;
+
         address[] memory path = new address[](2);
         path[0] = address(this);
         path[1] = uniswapV2Router.WETH();
         require(balanceOf(address(this)) >= _amount, "Insufficient tokens in contract");
-
+        
         _approve(address(this), address(uniswapV2RouterAddress), _amount);
-
-        require(_amount <= allowance(address(this), address(uniswapV2Router)), "Swap request exceeds allowance");
+        require(_amount <= allowance(address(this), address(uniswapV2RouterAddress)), "Swap request exceeds allowance");
 
         uniswapV2Router.swapExactTokensForETHSupportingFeeOnTransferTokens(
             _amount,
             0, // accept any amount of ETH
             path,
-            address(this),
-            block.timestamp + 600
+            _to,
+            (block.timestamp)
         );
         amountOut = address(this).balance - initialBalance;
     }
 
-    function swapTokensForEthAndAddLiquidity(address sender, uint256 tokenAmount) internal {
-        (uint256 newBalance) = swapToETH(tokenAmount);
+    function swapAndLiquify(uint256 tokenAmount) internal {
+        (uint256 newBalance) = swapToETH(tokenAmount, address(this));
         require(newBalance > 0, "Swap to ETH failed, no ETH received");
 
-        addLiquidityETH(tokenAmount, newBalance, sender);
+        _addLiquidityETH(tokenAmount, newBalance);
     }
 
-    function addLiquidityETH(uint256 tokenAmount, uint256 ethAmount, address to) internal {
+    function depositTokens(uint256 amount) public {
+        // Update the balance in storage
+        _transfer(msg.sender, address(this), amount);
+    }
+
+    function _addLiquidityETH(uint256 tokenAmount, uint256 ethAmount) internal {
         require(address(this).balance >= ethAmount, "Not enough ETH for liquidity");
         _approve(address(this), address(uniswapV2RouterAddress), tokenAmount);
+
         require(tokenAmount <= allowance(address(this), address(uniswapV2Router)), "Liquidity addition request exceeds allowance");
 
-        uniswapV2Router.addLiquidityETH{value: ethAmount}(
+        (uint256 tokenAmountSent, uint256 ethAmountSent, uint256 liquidity) = uniswapV2Router.addLiquidityETH{value: ethAmount}(
             address(this),
             tokenAmount,
             0, // slippage is unavoidable
             0, // slippage is unavoidable
-            to,
+            address(this),
             block.timestamp + 600
         );
-        
+        require(liquidity > 0, "Liquidity addition failed");
+
+        _tempLiquidityFee = 0;
     }
 
     function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
