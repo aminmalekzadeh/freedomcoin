@@ -533,6 +533,51 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "excludeFromFee",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "includeInFee",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "isExcludedFromFee",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "liquidityFee",
 				"outputs": [
@@ -706,6 +751,19 @@
 				"name": "swapForETHToUniswapV2",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "swapTokensAtAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -1151,39 +1209,43 @@
 			]
 		},
 		"contracts/FreedomCoin.sol": {
-			"keccak256": "0x0b6a47650364fd946c72aab5e6170faa5ee5f771d70d1b0f02faca032d3ceec1",
+			"keccak256": "0x44b4ae54558f1b865ebc72f5e0bce3b5a4cceb5a16640446e1974007a924f590",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c822e6a36c99c89ce4b064f6acc30fe6a50ed4753e406cb37cf764012c1d4e25",
-				"dweb:/ipfs/QmQhycqfVKPzXzzm6edXGY6VcSGT15jtrV4UzkoKxAWV5s"
+				"bzz-raw://8840e08462db4bbdc47c478c55ce4764cf8ce9c609c356523c03fd6e931a5a7c",
+				"dweb:/ipfs/QmfFhnX75Kc8hbfKqbFhpH92yFdND1UK4juu1d1CfA91G3"
 			]
 		},
 		"contracts/interfaces/IUniswapV2Factory.sol": {
-			"keccak256": "0xde5c15f2ad64dfc7a5652b304e6885fe76d577c8c58839a2d3327cf511dae1e2",
+			"keccak256": "0xabdb40da3f9a3045e878e45b2513749878d65432795dd014941f9c3e7ba558ea",
+			"license": "MIT",
 			"urls": [
-				"bzz-raw://5839e637176087443a4facbbd3cc0bb579d3587e3f7995b0ecb15582f445a820",
-				"dweb:/ipfs/QmPviP5jARK3L22rrXjwAMgjUTTthmaMaAdah4TcgLnErG"
+				"bzz-raw://e2039db84c58596b351d43620960efb9560c28d6f34ecff202c7a745ffb0f763",
+				"dweb:/ipfs/QmVfx3maxjjhxeCfPHQTFzczHEcwxXwnPHrZNPQp5joSge"
 			]
 		},
 		"contracts/interfaces/IUniswapV2Pair.sol": {
-			"keccak256": "0x7c9bc70e5996c763e02ff38905282bc24fb242b0ef2519a003b36824fc524a4b",
+			"keccak256": "0x0f3ce5f31d75c25f6d441917fef49c5d0dfbe918be42175e4613381d5f090eaa",
+			"license": "MIT",
 			"urls": [
-				"bzz-raw://85d5ad2dd23ee127f40907a12865a1e8cb5828814f6f2480285e1827dd72dedf",
-				"dweb:/ipfs/QmayKQWJgWmr46DqWseADyUanmqxh662hPNdAkdHRjiQQH"
+				"bzz-raw://0a8e7d7b929f5258c960fa311d3eb5214571e5c4df9b03567333cc37de32c84f",
+				"dweb:/ipfs/QmeJJQo3Y2cKbGWb6T9LMpV2p1kD5y86YrZZx2bjYDf8Bf"
 			]
 		},
 		"contracts/interfaces/IUniswapV2Router01.sol": {
-			"keccak256": "0x66eb4b8355b7d1fcb2e9e3ca8a0968663d9e0b194ff02c09ef0d1ae7981aa67d",
+			"keccak256": "0x00eb1040af17983f3482b75aa6bd92d526cc5de8480d7da4e581645b2f603014",
+			"license": "MIT",
 			"urls": [
-				"bzz-raw://f8da3fe63fbfd6331ce2b7f90983734e062193a54c67ca36826f40b6ccd9c7de",
-				"dweb:/ipfs/QmcifLPYeYj3phcEqtBdz3oN2gy7EXbj7N5WUHEQ4FANsD"
+				"bzz-raw://f8096e72d2fb020eff6b4bb1600164d7603c95198f803ea92fe318002d20e993",
+				"dweb:/ipfs/Qmdyoa4sNotvBokiYPziTG1NxfknBNqs5NhLYhZD4FeACu"
 			]
 		},
 		"contracts/interfaces/IUniswapV2Router02.sol": {
-			"keccak256": "0xc81f478bae3d753f4abd565dccc92820dde09f844e3db034b8750409ab52154a",
+			"keccak256": "0xcc85d0e31b3331196f9713a63bc3df289f6dcdeee7f878612c0fc59a16a92a70",
+			"license": "MIT",
 			"urls": [
-				"bzz-raw://3d77d94fc97dabd66e5da83896163edaaa44935a692de62b505654e89be54c63",
-				"dweb:/ipfs/QmWtKmLb1WRsymA5zHkWhwWoZs5Tnej6UzWwvfJN5prxGb"
+				"bzz-raw://cc9883c7f820ab285d6582a1ed4315f690cb00f03ef8a5bd70ab58a60329590e",
+				"dweb:/ipfs/Qmd4t7B6ggQy4JgXYEWKJfr3jmARUWbsMbmv8hQ8jvNdgM"
 			]
 		}
 	},

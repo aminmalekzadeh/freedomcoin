@@ -59,6 +59,7 @@
 			}
 		],
 		"devdoc": {
+			"details": "Contract module which provides a basic access control mechanism, where there is an account (an owner) that can be granted exclusive access to specific functions. By default, the owner account will be the one that deploys the contract. This can later be changed with {transferOwnership}. This module is used through inheritance. It will make available the modifier `onlyOwner`, which can be applied to your functions to restrict their use to the owner.",
 			"kind": "dev",
 			"methods": {
 				"constructor": {
@@ -84,7 +85,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/FreedomCoinNew.sol": "Ownable"
+			"contracts/PepeInu.sol": "Ownable"
 		},
 		"evmVersion": "shanghai",
 		"libraries": {},
@@ -98,12 +99,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/FreedomCoinNew.sol": {
-			"keccak256": "0x5f8a8507a258dc1661c16b4fbe8d08e54eb11f397cc3958a86e6ce5292000934",
+		"contracts/PepeInu.sol": {
+			"keccak256": "0x5394b5c191f86c124a303ef6f6e264cbd48b8a75f698811870392c89d726e58f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://19dde6270b1e33705018a4e29472367677c3fd1af69dc683da0dbee8dcf496eb",
-				"dweb:/ipfs/QmSCRS74wGTwevwGvceRDCisVKn8LbZz865hwW9uuk49jw"
+				"bzz-raw://018c86992223a3b44e4332a21f19f01804fa4355ec24bf547bee88c8dafcef06",
+				"dweb:/ipfs/QmdL4Y6NgNxvb9KYjjQDQTkPL4GDCBTgzTfub9y127EPux"
 			]
 		}
 	},

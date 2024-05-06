@@ -139,7 +139,7 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "recipient",
+						"name": "to",
 						"type": "address"
 					},
 					{
@@ -163,12 +163,12 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "sender",
+						"name": "from",
 						"type": "address"
 					},
 					{
 						"internalType": "address",
-						"name": "recipient",
+						"name": "to",
 						"type": "address"
 					},
 					{
@@ -190,6 +190,7 @@
 			}
 		],
 		"devdoc": {
+			"details": "Interface of the ERC20 standard as defined in the EIP.",
 			"events": {
 				"Approval(address,address,uint256)": {
 					"details": "Emitted when the allowance of a `spender` for an `owner` is set by a call to {approve}. `value` is the new allowance."
@@ -213,10 +214,10 @@
 					"details": "Returns the amount of tokens in existence."
 				},
 				"transfer(address,uint256)": {
-					"details": "Moves `amount` tokens from the caller's account to `recipient`. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event."
+					"details": "Moves `amount` tokens from the caller's account to `to`. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event."
 				},
 				"transferFrom(address,address,uint256)": {
-					"details": "Moves `amount` tokens from `sender` to `recipient` using the allowance mechanism. `amount` is then deducted from the caller's allowance. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event."
+					"details": "Moves `amount` tokens from `from` to `to` using the allowance mechanism. `amount` is then deducted from the caller's allowance. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event."
 				}
 			},
 			"version": 1
@@ -229,7 +230,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/FreedomCoinNew.sol": "IERC20"
+			"contracts/PepeInu.sol": "IERC20"
 		},
 		"evmVersion": "shanghai",
 		"libraries": {},
@@ -243,12 +244,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/FreedomCoinNew.sol": {
-			"keccak256": "0x5f8a8507a258dc1661c16b4fbe8d08e54eb11f397cc3958a86e6ce5292000934",
+		"contracts/PepeInu.sol": {
+			"keccak256": "0x5394b5c191f86c124a303ef6f6e264cbd48b8a75f698811870392c89d726e58f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://19dde6270b1e33705018a4e29472367677c3fd1af69dc683da0dbee8dcf496eb",
-				"dweb:/ipfs/QmSCRS74wGTwevwGvceRDCisVKn8LbZz865hwW9uuk49jw"
+				"bzz-raw://018c86992223a3b44e4332a21f19f01804fa4355ec24bf547bee88c8dafcef06",
+				"dweb:/ipfs/QmdL4Y6NgNxvb9KYjjQDQTkPL4GDCBTgzTfub9y127EPux"
 			]
 		}
 	},

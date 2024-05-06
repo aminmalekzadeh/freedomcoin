@@ -6,6 +6,7 @@
 	"output": {
 		"abi": [],
 		"devdoc": {
+			"details": "Provides information about the current execution context, including the sender of the transaction and its data. While these are generally available via msg.sender and msg.data, they should not be accessed in such a direct manner, since when dealing with meta-transactions the account sending and paying for execution may not be the actual sender (as far as an application is concerned). This contract is only required for intermediate, library-like contracts.",
 			"kind": "dev",
 			"methods": {},
 			"version": 1
@@ -18,7 +19,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/FreedomCoinNew.sol": "Context"
+			"contracts/PepeInu.sol": "Context"
 		},
 		"evmVersion": "shanghai",
 		"libraries": {},
@@ -32,12 +33,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/FreedomCoinNew.sol": {
-			"keccak256": "0x5f8a8507a258dc1661c16b4fbe8d08e54eb11f397cc3958a86e6ce5292000934",
+		"contracts/PepeInu.sol": {
+			"keccak256": "0x5394b5c191f86c124a303ef6f6e264cbd48b8a75f698811870392c89d726e58f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://19dde6270b1e33705018a4e29472367677c3fd1af69dc683da0dbee8dcf496eb",
-				"dweb:/ipfs/QmSCRS74wGTwevwGvceRDCisVKn8LbZz865hwW9uuk49jw"
+				"bzz-raw://018c86992223a3b44e4332a21f19f01804fa4355ec24bf547bee88c8dafcef06",
+				"dweb:/ipfs/QmdL4Y6NgNxvb9KYjjQDQTkPL4GDCBTgzTfub9y127EPux"
 			]
 		}
 	},

@@ -12,6 +12,9 @@ module.exports = {
   etherscan: {
     apiKey: "AHJFQN9UTSYFGA4BAYNDSG9QJ21W4X1WIT",
   },
+  sourcify: {
+    enabled: true
+  },  
   solidity: {
     version: "0.8.25",
     settings: {
@@ -23,11 +26,11 @@ module.exports = {
   },
   networks: {
     sepolia: {
-      url: `https://sepolia.infura.io/v3/${process.env.API_KEY_ACCESS}`,
+      url: `https://eth-sepolia.g.alchemy.com/v2/${process.env.API_KEY_ACCESS}`,
       accounts: [`0x${process.env.PRIVATE_KEY_TO_DEPLOY}`]
     },
-    polygon: {
-      url: `https://polygon-mainnet.g.alchemy.com/v2/${process.env.API_KEY_ACCESS}`,
+    mainnet: {
+      url: `https://eth-mainnet.g.alchemy.com/v2/${process.env.API_KEY_ACCESS}`,
       accounts: [`0x${process.env.PRIVATE_KEY_TO_DEPLOY}`],
       chainId: 137,
     }
