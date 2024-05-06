@@ -25,8 +25,8 @@ module.exports = {
     },
   },
   networks: {
-    sepolia: {
-      url: `https://eth-sepolia.g.alchemy.com/v2/${process.env.API_KEY_ACCESS}`,
+    polygon: {
+      url: `https://polygon-mainnet.g.alchemy.com/v2/${process.env.API_KEY_ACCESS}`,
       accounts: [`0x${process.env.PRIVATE_KEY_TO_DEPLOY}`]
     },
     mainnet: {
